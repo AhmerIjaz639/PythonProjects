@@ -3,11 +3,12 @@ from mysql.connector import Error
 
 import streamlit as st
 
-host = st.secrets["DB_HOST"]
-user = st.secrets["DB_USER"]
-password = st.secrets["DB_PASSWORD"]
-db = st.secrets["DB_NAME"]
-
+DB_CONFIG = {
+    "host": st.secrets["DB_HOST"],
+    "user": st.secrets["DB_USER"],
+    "password": st.secrets["DB_PASSWORD"],
+    "database": st.secrets["DB_NAME"]
+}
 def get_connection():
     """Return a new database connection."""
     return mysql.connector.connect(use_pure=True, **DB_CONFIG)
