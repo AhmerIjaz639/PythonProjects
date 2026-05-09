@@ -1,7 +1,10 @@
-import sys
-from pathlib import Path
-sys.path.append(str(Path(__file__).parent.parent.parent))
 
+from pathlib import Path
+
+import sys
+import os
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 import streamlit as st
 import urllib.request
 import mysql.connector
