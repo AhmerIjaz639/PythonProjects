@@ -1,18 +1,12 @@
 import mysql.connector
 from mysql.connector import Error
 
-import os
-from dotenv import load_dotenv
+import streamlit as st
 
-load_dotenv()
-
-DB_CONFIG = {
-    "host": os.getenv("DB_HOST"),
-    "user": os.getenv("DB_USER"),
-    "password": os.getenv("DB_PASSWORD"),
-    "database": os.getenv("DB_NAME"),
-    "autocommit": True
-}
+host = st.secrets["DB_HOST"]
+user = st.secrets["DB_USER"]
+password = st.secrets["DB_PASSWORD"]
+db = st.secrets["DB_NAME"]
 
 def get_connection():
     """Return a new database connection."""
