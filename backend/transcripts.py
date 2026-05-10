@@ -20,7 +20,6 @@ def get_officer_profile(staff_id):
         for rs in cursor.stored_results():
             results.append(rs.fetchall())
 
-        # result-set order matches procedure definition
         profile            = results[0][0] if results[0] else {}
         beat               = results[1]    if len(results) > 1 else []
         duties             = results[2]    if len(results) > 2 else []
@@ -29,12 +28,12 @@ def get_officer_profile(staff_id):
         ops                = results[5]    if len(results) > 5 else []
 
         return {
-            "profile":            profile,
-            "beat":               beat,
-            "duties":             duties,
-            "reported_firs":      reported_firs,
+            "profile": profile,
+            "beat": beat,
+            "duties": duties,
+            "reported_firs": reported_firs,
             "investigating_firs": investigating_firs,
-            "ops":                ops,
+            "ops": ops,
         }
     finally:
         cursor.close()
@@ -46,9 +45,6 @@ def get_officer_profile(staff_id):
 # ═══════════════════════════════════════════════════════════
 
 def get_criminal_profile(cnic):
-    """
-    Calls sp_criminal_dossier which returns 3 result-sets.
-    """
     conn = mysql.connector.connect(use_pure=True, **DB_CONFIG)
     cursor = conn.cursor(dictionary=True)
     try:
@@ -59,13 +55,13 @@ def get_criminal_profile(cnic):
             results.append(rs.fetchall())
 
         wanted_info = results[0][0] if results and results[0] else None
-        arrests     = results[1]    if len(results) > 1 else []
-        firs        = results[2]    if len(results) > 2 else []
+        arrests     = results[1] if len(results) > 1 else []
+        firs        = results[2] if len(results) > 2 else []
 
         return {
             "wanted_info": wanted_info,
-            "arrests":     arrests,
-            "firs":        firs,
+            "arrests": arrests,
+            "firs": firs,
         }
     finally:
         cursor.close()
