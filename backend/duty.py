@@ -5,28 +5,28 @@ from backend.db import execute_query, fetch_all
 # ═══════════════════════════════════════════════════════════
 
 def add_staff(belt_no, name, rank_officer, cnic, phone, address, status):
-    q = """INSERT INTO Staff 
+    q = """INSERT INTO staff 
            (BeltNo, Name, RankOfficer, CNIC, Phone, Address, Status)
            VALUES (%s,%s,%s,%s,%s,%s,%s)"""
     return execute_query(q, (belt_no, name, rank_officer, cnic, phone, address, status))
 
 def get_all_staff():
-    return fetch_all("SELECT * FROM Staff ORDER BY BeltNo")
+    return fetch_all("SELECT * FROM staff ORDER BY BeltNo")
 
 def update_staff_status(staff_id, status):
     return execute_query(
-        "UPDATE Staff SET Status = %s WHERE StaffID = %s",
+        "UPDATE staff SET Status = %s WHERE StaffID = %s",
         (status, staff_id)
     )
 
 def delete_staff(staff_id):
     return execute_query(
-        "DELETE FROM Staff WHERE StaffID = %s",
+        "DELETE FROM staff WHERE StaffID = %s",
         (staff_id,)
     )
 
 def update_staff(staff_id, belt_no, name, rank_officer, cnic, phone, address, status):
-    q = """UPDATE Staff 
+    q = """UPDATE staff 
            SET BeltNo = %s, Name = %s, RankOfficer = %s,
                CNIC = %s, Phone = %s, Address = %s, Status = %s
            WHERE StaffID = %s"""
@@ -37,7 +37,7 @@ def update_staff(staff_id, belt_no, name, rank_officer, cnic, phone, address, st
 # ═══════════════════════════════════════════════════════════
 
 def add_duty(staff_id, duty_date, division, shift, status):
-    q = """INSERT INTO DutyRoster 
+    q = """INSERT INTO dutyroster 
            (StaffID, DutyDate, Division, Shift, AttendanceStatus)
            VALUES (%s,%s,%s,%s,%s)"""
     return execute_query(q, (staff_id, duty_date, division, shift, status))
@@ -45,14 +45,14 @@ def add_duty(staff_id, duty_date, division, shift, status):
 def get_all_duties():
     q = """SELECT d.DutyID, s.BeltNo, s.Name, s.RankOfficer,
                   d.DutyDate, d.Division, d.Shift, d.AttendanceStatus
-           FROM DutyRoster d
-           JOIN Staff s ON d.StaffID = s.StaffID
+           FROM dutyroster d
+           JOIN staff s ON d.StaffID = s.StaffID
            ORDER BY d.DutyDate DESC"""
     return fetch_all(q)
 
 def delete_duty(duty_id):
     return execute_query(
-        "DELETE FROM DutyRoster WHERE DutyID = %s",
+        "DELETE FROM dutyroster WHERE DutyID = %s",
         (duty_id,)
     )
 
@@ -61,10 +61,8 @@ def delete_duty(duty_id):
 # ═══════════════════════════════════════════════════════════
 
 def add_roznamcha(staff_id, date, time_out, purpose, location, time_in, remarks):
-    q = """INSERT INTO Roznamcha 
+    q = """INSERT INTO roznamcha 
            (StaffID, Date, TimeOut, Purpose, Location, TimeIn, Remarks)
-        
-        
            VALUES (%s,%s,%s,%s,%s,%s,%s)"""
     return execute_query(q, (staff_id, date, time_out, purpose, location, time_in, remarks))
 
@@ -72,13 +70,13 @@ def get_all_roznamcha():
     q = """SELECT r.DiaryID, s.BeltNo, s.Name, s.RankOfficer,
                   r.Date, r.TimeOut, r.Purpose, r.Location,
                   r.TimeIn, r.Remarks
-           FROM Roznamcha r
-           JOIN Staff s ON r.StaffID = s.StaffID
+           FROM roznamcha r
+           JOIN staff s ON r.StaffID = s.StaffID
            ORDER BY r.Date DESC"""
     return fetch_all(q)
 
 def delete_roznamcha(diary_id):
     return execute_query(
-        "DELETE FROM Roznamcha WHERE DiaryID = %s",
+        "DELETE FROM roznamcha WHERE DiaryID = %s",
         (diary_id,)
     )
