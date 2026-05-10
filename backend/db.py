@@ -1,17 +1,25 @@
-import mysql.connector
-from mysql.connector import Error
-
 import os
 import mysql.connector
 
-conn = mysql.connector.connect(
-    host=os.environ["DB_HOST"],
-    port=int(os.environ["DB_PORT"]),
-    user=os.environ["DB_USER"],
-    password=os.environ["DB_PASSWORD"],
-    database=os.environ["DB_NAME"],
-    ssl_ca="ca.pem"
-)
+def get_connection():
+    return mysql.connector.connect(
+        host=os.environ["DB_HOST"],
+        port=int(os.environ["DB_PORT"]),
+        user=os.environ["DB_USER"],
+        password=os.environ["DB_PASSWORD"],
+        database=os.environ["DB_NAME"],
+        ssl_ca="ca.pem"
+    )
+
+
+def fetch_all(query, params=None):
+    conn = get_connection()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute(query, params or ())
+    result = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return result
 def get_connection():
     """Return a new database connection."""
     return mysql.connector.connect(use_pure=True, **DB_CONFIG)
