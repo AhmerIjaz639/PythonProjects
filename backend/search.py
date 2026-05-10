@@ -8,7 +8,7 @@ def search_staff(keyword):
     keyword = f"%{keyword}%"
     q = """SELECT StaffID, BeltNo, Name, RankOfficer,
                   CNIC, Phone, Address, Status
-           FROM Staff
+           FROM staff
            WHERE Name       LIKE %s
               OR BeltNo     LIKE %s
               OR CNIC       LIKE %s
@@ -25,8 +25,8 @@ def search_duty(keyword):
     keyword = f"%{keyword}%"
     q = """SELECT d.DutyID, s.BeltNo, s.Name, s.RankOfficer,
                   d.DutyDate, d.Division, d.Shift, d.AttendanceStatus
-           FROM DutyRoster d
-           JOIN Staff s ON d.StaffID = s.StaffID
+           FROM dutyroster d
+           JOIN staff s ON d.StaffID = s.StaffID
            WHERE s.Name            LIKE %s
               OR s.BeltNo          LIKE %s
               OR d.Division        LIKE %s
@@ -38,6 +38,7 @@ def search_duty(keyword):
 # ═══════════════════════════════════════════════════════════
 # FIR SEARCH
 # ═══════════════════════════════════════════════════════════
+
 def search_fir(keyword):
     keyword = f"%{keyword}%"
     q = """SELECT f.FIRID, f.FIRNumber, f.DateTime,
@@ -48,10 +49,10 @@ def search_fir(keyword):
                   b.BeatName,
                   s1.Name AS ReportingOfficer,
                   s2.Name AS AssignedOfficer
-           FROM FIR f
-           LEFT JOIN Beat  b  ON f.BeatID            = b.BeatID
-           LEFT JOIN Staff s1 ON f.ReportingOfficerID = s1.StaffID
-           LEFT JOIN Staff s2 ON f.AssignedOfficerID  = s2.StaffID
+           FROM fir f
+           LEFT JOIN beat  b  ON f.BeatID            = b.BeatID
+           LEFT JOIN staff s1 ON f.ReportingOfficerID = s1.StaffID
+           LEFT JOIN staff s2 ON f.AssignedOfficerID  = s2.StaffID
            WHERE f.FIRNumber     LIKE %s
               OR f.VictimName    LIKE %s
               OR f.VictimCNIC    LIKE %s
@@ -68,6 +69,7 @@ def search_fir(keyword):
         keyword, keyword, keyword,
         keyword, keyword, keyword, keyword
     ))
+
 # ═══════════════════════════════════════════════════════════
 # WANTED CRIMINALS SEARCH
 # ═══════════════════════════════════════════════════════════
@@ -95,8 +97,8 @@ def search_arrests(keyword):
                   a.AccusedName, a.CNIC,
                   a.ArrestDate, a.ArrestLocation,
                   a.SentToPoliceStation, a.Remarks
-           FROM ArrestRegister a
-           JOIN FIR f ON a.FIRID = f.FIRID
+           FROM arrestregister a
+           JOIN fir f ON a.FIRID = f.FIRID
            WHERE a.AccusedName         LIKE %s
               OR a.CNIC                LIKE %s
               OR f.FIRNumber           LIKE %s
@@ -114,9 +116,9 @@ def search_beats(keyword):
     q = """SELECT bb.BeatRecordID, b.BeatName, b.Area,
                   s.BeltNo, s.Name AS Officer,
                   bb.Date, bb.ActivityDetails, bb.Remarks
-           FROM BeatBook bb
-           JOIN Beat  b ON bb.BeatID  = b.BeatID
-           JOIN Staff s ON bb.StaffID = s.StaffID
+           FROM beatbook bb
+           JOIN beat  b ON bb.BeatID  = b.BeatID
+           JOIN staff s ON bb.StaffID = s.StaffID
            WHERE b.BeatName        LIKE %s
               OR b.Area            LIKE %s
               OR s.Name            LIKE %s
@@ -134,8 +136,8 @@ def search_operations(keyword):
     q = """SELECT o.OperationID, o.Date, o.Location,
                   s.Name AS ConductedBy,
                   o.Reason, o.Result
-           FROM SearchOperation o
-           LEFT JOIN Staff s ON o.ConductedBy = s.StaffID
+           FROM searchoperation o
+           LEFT JOIN staff s ON o.ConductedBy = s.StaffID
            WHERE o.Location LIKE %s
               OR o.Reason   LIKE %s
               OR o.Result   LIKE %s
