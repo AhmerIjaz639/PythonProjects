@@ -1,28 +1,19 @@
 import os
 import mysql.connector
+from mysql.connector import Error
+
 
 def get_connection():
+    """Create and return a new database connection."""
     return mysql.connector.connect(
         host=os.environ["DB_HOST"],
         port=int(os.environ["DB_PORT"]),
         user=os.environ["DB_USER"],
         password=os.environ["DB_PASSWORD"],
         database=os.environ["DB_NAME"],
-        ssl_ca="ca.pem"
+        ssl_ca="ca.pem"   # Make sure this file exists in repo
     )
 
-
-def fetch_all(query, params=None):
-    conn = get_connection()
-    cursor = conn.cursor(dictionary=True)
-    cursor.execute(query, params or ())
-    result = cursor.fetchall()
-    cursor.close()
-    conn.close()
-    return result
-def get_connection():
-    """Return a new database connection."""
-    return mysql.connector.connect(use_pure=True, **DB_CONFIG)
 
 def execute_query(query, params=None):
     conn = get_connection()
@@ -38,6 +29,7 @@ def execute_query(query, params=None):
         cursor.close()
         conn.close()
 
+
 def fetch_all(query, params=None):
     conn = get_connection()
     cursor = conn.cursor(dictionary=True)
@@ -50,6 +42,7 @@ def fetch_all(query, params=None):
     finally:
         cursor.close()
         conn.close()
+
 
 def fetch_one(query, params=None):
     conn = get_connection()
