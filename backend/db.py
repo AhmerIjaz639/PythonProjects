@@ -1,14 +1,17 @@
 import mysql.connector
 from mysql.connector import Error
 
-import streamlit as st
+import os
+import mysql.connector
 
-DB_CONFIG = {
-    "host": st.secrets["DB_HOST"],
-    "user": st.secrets["DB_USER"],
-    "password": st.secrets["DB_PASSWORD"],
-    "database": st.secrets["DB_NAME"]
-}
+conn = mysql.connector.connect(
+    host=os.environ["DB_HOST"],
+    port=int(os.environ["DB_PORT"]),
+    user=os.environ["DB_USER"],
+    password=os.environ["DB_PASSWORD"],
+    database=os.environ["DB_NAME"],
+    ssl_ca="ca.pem"
+)
 def get_connection():
     """Return a new database connection."""
     return mysql.connector.connect(use_pure=True, **DB_CONFIG)
