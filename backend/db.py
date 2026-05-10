@@ -1,20 +1,19 @@
+
 import os
 import mysql.connector
 from mysql.connector import Error
 
+DB_CONFIG = {
+    "host": os.environ["DB_HOST"],
+    "port": int(os.environ["DB_PORT"]),
+    "user": os.environ["DB_USER"],
+    "password": os.environ["DB_PASSWORD"],
+    "database": os.environ["DB_NAME"],
+    "ssl_ca": "ca.pem"
+}
 
 def get_connection():
-    """Create and return a new database connection."""
-    return mysql.connector.connect(
-        host=os.environ["DB_HOST"],
-        port=int(os.environ["DB_PORT"]),
-        user=os.environ["DB_USER"],
-        password=os.environ["DB_PASSWORD"],
-        database=os.environ["DB_NAME"],
-        ssl_ca="ca.pem"   # Make sure this file exists in repo
-    )
-
-
+    return mysql.connector.connect(use_pure=True, **DB_CONFIG)
 def execute_query(query, params=None):
     conn = get_connection()
     cursor = conn.cursor()
