@@ -8,7 +8,7 @@ def add_fir(fir_number, datetime, victim_name, victim_cnic, victim_address,
             accused_name, accused_cnic, accused_address,
             crime_type, crime_location, distance, beat_id, reporting_officer_id,
             reporting_rank, fit_status, assigned_officer_id, case_status, fir_details):
-    q = """INSERT INTO FIR (FIRNumber, DateTime,
+    q = """INSERT INTO fir (FIRNumber, DateTime,
                             VictimName, VictimCNIC, VictimAddress,
                             AccusedName, AccusedCNIC, AccusedAddress,
                             CrimeType, CrimeLocation, DistanceFromStation, BeatID,
@@ -43,10 +43,10 @@ def get_all_firs():
                    s2.Name AS AssignedOfficer,
                    f.CaseStatus,
                    f.FIRDetails
-            FROM   FIR   f
-            LEFT JOIN Beat  b  ON f.BeatID            = b.BeatID
-            LEFT JOIN Staff s1 ON f.ReportingOfficerID = s1.StaffID
-            LEFT JOIN Staff s2 ON f.AssignedOfficerID  = s2.StaffID
+            FROM   fir   f
+            LEFT JOIN beat  b  ON f.BeatID            = b.BeatID
+            LEFT JOIN staff s1 ON f.ReportingOfficerID = s1.StaffID
+            LEFT JOIN staff s2 ON f.AssignedOfficerID  = s2.StaffID
             ORDER BY f.DateTime DESC"""
     return fetch_all(q)
 
@@ -55,17 +55,17 @@ def get_open_firs():
     return fetch_all("SELECT * FROM vw_open_firs")
 
 def update_fir_status(fir_id, status):
-    return execute_query("UPDATE FIR SET CaseStatus = %s WHERE FIRID = %s", (status, fir_id))
+    return execute_query("UPDATE fir SET CaseStatus = %s WHERE FIRID = %s", (status, fir_id))
 
 def delete_fir(fir_id):
-    return execute_query("DELETE FROM FIR WHERE FIRID = %s", (fir_id,))
+    return execute_query("DELETE FROM fir WHERE FIRID = %s", (fir_id,))
 
 # ═══════════════════════════════════════════════════════════════════════════
 # ARREST REGISTER  — reads from vw_arrests_with_fir
 # ═══════════════════════════════════════════════════════════════════════════
 
 def add_arrest(fir_id, accused_name, cnic, arrest_date, arrest_location, station, remarks):
-    q = """INSERT INTO ArrestRegister (FIRID, AccusedName, CNIC, ArrestDate,
+    q = """INSERT INTO arrestregister (FIRID, AccusedName, CNIC, ArrestDate,
                                        ArrestLocation, SentToPoliceStation, Remarks)
            VALUES (%s,%s,%s,%s,%s,%s,%s)"""
     return execute_query(q, (fir_id, accused_name, cnic, arrest_date,
@@ -75,14 +75,14 @@ def get_all_arrests():
     return fetch_all("SELECT * FROM vw_arrests_with_fir")
 
 def delete_arrest(arrest_id):
-    return execute_query("DELETE FROM ArrestRegister WHERE ArrestID = %s", (arrest_id,))
+    return execute_query("DELETE FROM arrestregister WHERE ArrestID = %s", (arrest_id,))
 
 # ═══════════════════════════════════════════════════════════════════════════
 # CHALLAN REGISTER  — reads from vw_challan_detail
 # ═══════════════════════════════════════════════════════════════════════════
 
 def add_challan(fir_id, court_name, challan_date, fine_amount, status):
-    q = """INSERT INTO ChallanRegister (FIRID, CourtName, ChallanDate, FineAmount, Status)
+    q = """INSERT INTO challanregister (FIRID, CourtName, ChallanDate, FineAmount, Status)
            VALUES (%s,%s,%s,%s,%s)"""
     return execute_query(q, (fir_id, court_name, challan_date, fine_amount, status))
 
@@ -90,7 +90,7 @@ def get_all_challans():
     return fetch_all("SELECT * FROM vw_challan_detail")
 
 def delete_challan(challan_id):
-    return execute_query("DELETE FROM ChallanRegister WHERE ChallanID = %s", (challan_id,))
+    return execute_query("DELETE FROM challanregister WHERE ChallanID = %s", (challan_id,))
 
 # ═══════════════════════════════════════════════════════════════════════════
 # WANTED CRIMINALS
@@ -106,7 +106,7 @@ def get_all_criminals():
                   w.CrimeDetails, w.LastSeenLocation, w.Status,
                   f.FIRNumber
            FROM WantedCriminals w
-           LEFT JOIN FIR f ON w.FIRID = f.FIRID
+           LEFT JOIN fir f ON w.FIRID = f.FIRID
            ORDER BY w.Status"""
     return fetch_all(q)
 
