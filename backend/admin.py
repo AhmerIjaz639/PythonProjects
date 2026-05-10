@@ -5,17 +5,17 @@ from backend.db import execute_query, fetch_all, fetch_one
 # ═══════════════════════════════════════════════════════════
 
 def add_correspondence(letter_number, date, from_dept, to_dept, subject, description):
-    q = """INSERT INTO OfficialCorrespondence
+    q = """INSERT INTO officialcorrespondence
            (LetterNumber, Date, FromDepartment, ToDepartment, Subject, Description)
            VALUES (%s,%s,%s,%s,%s,%s)"""
     return execute_query(q, (letter_number, date, from_dept, to_dept, subject, description))
 
 def get_all_correspondence():
-    return fetch_all("SELECT * FROM OfficialCorrespondence ORDER BY Date DESC")
+    return fetch_all("SELECT * FROM officialcorrespondence ORDER BY Date DESC")
 
 def delete_correspondence(letter_id):
     return execute_query(
-        "DELETE FROM OfficialCorrespondence WHERE LetterID = %s", (letter_id,)
+        "DELETE FROM officialcorrespondence WHERE LetterID = %s", (letter_id,)
     )
 
 # ═══════════════════════════════════════════════════════════
@@ -23,17 +23,17 @@ def delete_correspondence(letter_id):
 # ═══════════════════════════════════════════════════════════
 
 def add_inspection(inspector_name, designation, visit_date, remarks):
-    q = """INSERT INTO InspectionRegister
+    q = """INSERT INTO inspectionregister
            (InspectorName, Designation, VisitDate, Remarks)
            VALUES (%s,%s,%s,%s)"""
     return execute_query(q, (inspector_name, designation, visit_date, remarks))
 
 def get_all_inspections():
-    return fetch_all("SELECT * FROM InspectionRegister ORDER BY VisitDate DESC")
+    return fetch_all("SELECT * FROM inspectionregister ORDER BY VisitDate DESC")
 
 def delete_inspection(insp_id):
     return execute_query(
-        "DELETE FROM InspectionRegister WHERE InspectionID = %s", (insp_id,)
+        "DELETE FROM inspectionregister WHERE InspectionID = %s", (insp_id,)
     )
 
 # ═══════════════════════════════════════════════════════════
@@ -41,7 +41,7 @@ def delete_inspection(insp_id):
 # ═══════════════════════════════════════════════════════════
 
 def add_fund(source, amount_received, date_received, amount_used, purpose):
-    q = """INSERT INTO GovtFund
+    q = """INSERT INTO govtfund
            (Source, AmountReceived, DateReceived, AmountUsed, Purpose)
            VALUES (%s,%s,%s,%s,%s)"""
     return execute_query(q, (source, amount_received, date_received, amount_used, purpose))
@@ -51,7 +51,7 @@ def get_all_funds():
     return fetch_all("SELECT * FROM vw_fund_overview")
 
 def delete_fund(fund_id):
-    return execute_query("DELETE FROM GovtFund WHERE FundID = %s", (fund_id,))
+    return execute_query("DELETE FROM govtfund WHERE FundID = %s", (fund_id,))
 
 # ═══════════════════════════════════════════════════════════
 # FUND USAGE  — now calls stored procedure sp_use_fund
