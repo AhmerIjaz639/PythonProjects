@@ -1,4 +1,3 @@
-
 import os
 import mysql.connector
 from mysql.connector import Error
@@ -14,6 +13,8 @@ DB_CONFIG = {
 
 def get_connection():
     return mysql.connector.connect(use_pure=True, **DB_CONFIG)
+
+
 def execute_query(query, params=None):
     conn = get_connection()
     cursor = conn.cursor()
@@ -22,7 +23,7 @@ def execute_query(query, params=None):
         conn.commit()
         return True
     except Error as e:
-        print(f"DB Error: {e}")
+        print("DB ERROR:", e)
         return False
     finally:
         cursor.close()
@@ -36,7 +37,7 @@ def fetch_all(query, params=None):
         cursor.execute(query, params or ())
         return cursor.fetchall()
     except Error as e:
-        print(f"DB Error: {e}")
+        print("DB ERROR:", e)
         return []
     finally:
         cursor.close()
@@ -50,7 +51,7 @@ def fetch_one(query, params=None):
         cursor.execute(query, params or ())
         return cursor.fetchone()
     except Error as e:
-        print(f"DB Error: {e}")
+        print("DB ERROR:", e)
         return None
     finally:
         cursor.close()
